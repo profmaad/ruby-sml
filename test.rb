@@ -1,7 +1,10 @@
 require 'pp'
 
+$: << "./lib"
+
 require 'lib/transport-binary'
 require 'lib/encoding-binary'
+require 'lib/sml-file'
 
 @inputFile = "test-data/request.sml"
 #@inputFile = "test-data/response.sml"
@@ -26,5 +29,8 @@ decodedFile = SML::BinaryEncoding.decode_file(encodedFile)
 puts "Decoded FIle:"
 pp decodedFile
 puts "-------------"
+
+sml_file = SML::File.construct(decodedFile)
+pp sml_file
 
 io.close
