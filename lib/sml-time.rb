@@ -13,6 +13,7 @@ module SML
     def self.construct(array_rep)
       return nil if array_rep.nil?
       choice = array_rep.shift
+      array_rep.shift unless choice.nil?
       type = case choice
              when 0x01
                :seconds_index
@@ -20,6 +21,7 @@ module SML
                :timestamp
              end
       value = array_rep.shift
+      array_rep.shift unless value.nil?
 
       return SML::Time.new(type, value)
     end
@@ -31,7 +33,7 @@ module SML
                  0x02
                end
 
-      return [] << choice << value
+      return [] << choice << :uint8 << value << :uint32
     end
 
   end

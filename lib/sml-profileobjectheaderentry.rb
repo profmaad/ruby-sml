@@ -16,11 +16,14 @@ module SML
       name = array_rep.shift
       unit = array_rep.shift
       scaler = array_rep.shift
+      array_rep.shift unless scaler.nil?
 
       return SML::ProfileObjectHeaderEntry.new(name, unit, scaler)
     end
     def to_a
-      return [] << name << unit << scaler
+      result = [] << name << unit << scaler
+      result << :int8 unless scaler.nil?
+      return result
     end
 
   end

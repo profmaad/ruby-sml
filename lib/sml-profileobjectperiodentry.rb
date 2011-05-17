@@ -18,6 +18,7 @@ module SML
       return nil if array_rep.nil?
       val_time = SML::Time.construct(array_rep.shift)
       status = array_rep.shift
+      array_rep.shift unless status.nil?
       value_list = []
       array_rep.shift.each do |entry_array_rep|
         entry = SML::ValueEntry.construct(entry_array_rep)
@@ -34,8 +35,10 @@ module SML
       value_list.each do |entry|
         value_list_array << entry.to_a
       end
-      
-      return [] << val_time.to_a << status << value_list_array << period_signature
+
+      result = [] << val_time.to_a << status
+      result << :uint64 unless status.nil?
+      return result << value_list_array << period_signature
     end
 
   end

@@ -108,7 +108,7 @@ module SML
             value = true
           end
           # puts "bool: #{value}"
-          current_list << value
+          current_list << value << :bool
         when :signed
           value = 0
           bytes_left = length
@@ -120,7 +120,7 @@ module SML
           end
           value = to_signed(value, length*8)
           # puts "int#{length*8}: #{value}"
-          current_list << value
+          current_list << value << "int#{length*8}".to_sym
         when :unsigned
           value = 0
           bytes_left = length
@@ -131,7 +131,7 @@ module SML
             bytes_left -= 1
           end
           # puts "uint#{length*8}: #{value}"
-          current_list << value
+          current_list << value << "uint#{length*8}".to_sym
         when :list
           # puts "list: #{length} elements"
           list_depth += 1
@@ -153,7 +153,41 @@ module SML
     end
 
     def self.encode_file(file)
+      result = String.new
+
+      file.each do |message|
+        result << encode_value(message) << 0x00
+      end
+
+      return result
+    end
+
+    def self.encode_value(value)
+      result = String.new
+
+      case value
+      when Array
+        tl_bytes = encode_length(value.length)
+        tl_bytes[0] = 0b01110000 + tl_bytes[0]
+      when String
+        tl_bytes = encode_length(value.length)
+        tl_bytes[0] = 0b00000000 + tl_bytes[0]
+      when Fixnum
+        tl_bytes = encode_length(value.length)
+      when true
+        result << 0x42 << 0x01
+      when false
+        result << 0x42 << 0x00
+      when nil
+        result << 0x01
+      end
       
+      return result
+    end
+    def self.encode_length(length)
+      result = []
+
+      return result
     end
 
     def self.to_signed(int, bits)  

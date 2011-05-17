@@ -18,7 +18,9 @@ module SML
       return nil if array_rep.nil?
       transaction_id = array_rep.shift
       group_no = array_rep.shift
+      array_rep.shift unless group_no.nil?
       abort_on_error_code = array_rep.shift
+      array_rep.shift unless abort_on_error_code.nil?
       abort_on_error = nil
       abort_on_error = case abort_on_error_code
                        when 0x00
@@ -33,6 +35,7 @@ module SML
       body = SML::MessageBody.construct(array_rep.shift)
       return nil if body.nil?
       checksum = array_rep.shift
+      array_rep.shift unless checksum.nil?
 
       return nil unless array_rep.shift == :end_of_message
       return SML::Message.new(transaction_id, group_no, abort_on_error, body, checksum)
@@ -49,7 +52,13 @@ module SML
                               0xff
                             end
       
-      return [] << transaction_id << group_no << abort_on_error_code << SML::MessageBody.to_a(body) << checksum << :end_of_message
+      result = [] << transaction_id << group_no
+      result << :uint8 unless group_no.nil?
+      result << abort_on_error_code
+      result << :uint8 unless abort_on_error_code.nil?
+      result << SML::MessageBody.to_a(body) << checksum
+      result << :uint16 unless checksum.nil?
+      return result << :end_of_message
     end
 
   end

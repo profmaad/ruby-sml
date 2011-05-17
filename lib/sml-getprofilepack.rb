@@ -29,6 +29,7 @@ module SML
         username = array_rep.shift
         password = array_rep.shift
         with_raw_data = array_rep.shift
+        array_rep.shift unless with_raw_data.nil?
         begin_time = SML::Time.construct(array_rep.shift)
         end_time = SML::Time.construct(array_rep.shift)
         parameter_treepath = SML::Treepath.construct(array_rep.shift)
@@ -39,7 +40,9 @@ module SML
         return SML::GetProfilePack::Request.new(server_id, username, password, with_raw_data, begin_time, end_time, parameter_treepath, object_list, das_details)
       end
       def to_a
-        return [] << server_id << username << password << with_raw_data << begin_time.to_a << end_time.to_a << parameter_treepath.to_a << object_list << das_details.to_a
+        result = [] << server_id << username << password << with_raw_data
+        result << :bool unless with_raw_data.nil?
+        return result << begin_time.to_a << end_time.to_a << parameter_treepath.to_a << object_list << das_details.to_a
       end
 
     end
@@ -63,6 +66,7 @@ module SML
         server_id = array_rep.shift
         act_time = SML::Time.construct(array_rep.shift)
         registration_period = array_rep.shift
+        array_rep.shift unless registration_period.nil?
         parameter_treepath = SML::Treepath.construct(array_rep.shift)
         header_list = []
         array_rep.shift.each do |entry_array_rep|
@@ -92,7 +96,9 @@ module SML
           period_list_array << entry.to_a
         end
 
-        return [] << server_id << act_time.to_a << registration_period << parameter_treepath.to_a << header_list_array << period_list_array << raw_data << profile_signature
+        result = [] << server_id << act_time.to_a << registration_period
+        result << :uint32 unless registration_period.nil?
+        return result << parameter_treepath.to_a << header_list_array << period_list_array << raw_data << profile_signature
       end
 
     end

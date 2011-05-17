@@ -26,11 +26,14 @@ module SML
         username = array_rep.shift
         password = array_rep.shift
         sml_version = array_rep.shift
+        array_rep.shift unless sml_version.nil?
 
         return SML::PublicOpen::Request.new(codepage, client_id, request_file_id, server_id, username, password, sml_version)
       end
       def to_a
-        return [] << codepage << client_id << request_file_id << server_id << username << password << sml_version
+        result = [] << codepage << client_id << request_file_id << server_id << username << password << sml_version
+        result << :uint8 unless sml_version.nil?
+        return result
       end
       
     end
@@ -55,12 +58,15 @@ module SML
         server_id = array_rep.shift
         reference_time = SML::Time.construct(array_rep.shift)
         sml_version = array_rep.shift
+        array_rep.shift unless sml_version.nil?
 
         return nil if reference_time.nil?
         return SML::PublicOpen::Response.new(codepage, client_id, request_file_id, server_id, reference_time, sml_version)
       end
       def to_a
-         return [] << codepage << client_id << request_file_id << server_id << reference_time.to_a << sml_version
+        result = [] << codepage << client_id << request_file_id << server_id << reference_time.to_a << sml_version
+        result << :uint8 unless sml_version.nil?
+        return result
       end
 
     end

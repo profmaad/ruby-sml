@@ -15,6 +15,7 @@ module SML
     def self.construct(array_rep)
       return nil if array_rep.nil?
       choice = array_rep.shift
+      array_rep.shift unless choice.nil?
       body_array = array_rep.shift
       return case choice
              when 0x0100
@@ -84,7 +85,9 @@ module SML
                  0xff01
                end
 
-      return [] << choice << object.to_a
+      result = [] << choice
+      result << :uint32 unless choice.nil?
+      return result << object.to_a
     end
 
   end
