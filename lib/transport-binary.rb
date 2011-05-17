@@ -1,3 +1,5 @@
+require 'crc16'
+
 module SML
 
   class BinaryTransport
@@ -26,17 +28,18 @@ module SML
     end
     def self.writefile(io, file)
       source = String.new(file)
+      result = String.new
 
       # add transport begin header
-      io << [0x1b1b1b1b, 0x01010101].pack('NN')
+      result << [0x1b1b1b1b, 0x01010101].pack('NN')
 
       while not source.empty?
         value = source.unpack('N')[0]
         if value == 0x1b1b1b1b
-          io << [0x1b1b1b1b].pack('N')
-          io << source.slice!(0,4)
+          result << [0x1b1b1b1b].pack('N')
+          result << source.slice!(0,4)
         else
-          io << source.slice!(0,1)
+          result << source.slice!(0,1)
         end
       end
 
@@ -45,10 +48,16 @@ module SML
 
       # add padding
       padding_length.times do
-        io << 0x00
+        result << 0x00
       end
       # add transmission end header
-      io << [0x1b1b1b1b, 0x1a, padding_length, 0x0000].pack('NCCn')
+      result << [0x1b1b1b1b, 0x1a, padding_length].pack('NCC')
+
+      # calculate checksum
+      checksum = CRC16.crc16(result)
+      result << [checksum].pack('n')
+
+      io << result
     end
 
     def self.handle_escape(bytes)
