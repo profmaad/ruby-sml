@@ -14,9 +14,10 @@ module SML
     end
 
     def self.construct(array_rep)
-      transaction_id = array_rep.shift.to_s
-      group_no = array_rep.shift.to_i
-      abort_on_error_code = array_rep.shift.to_i
+      return nil if array_rep.nil?
+      transaction_id = array_rep.shift
+      group_no = array_rep.shift
+      abort_on_error_code = array_rep.shift
       abort_on_error = nil
       abort_on_error = case abort_on_error_code
                        when 0x00
@@ -30,7 +31,7 @@ module SML
                        end
       body = SML::MessageBody.construct(array_rep.shift)
       return nil if body.nil?
-      checksum = array_rep.shift.to_i
+      checksum = array_rep.shift
       
       return SML::Message.new(transaction_id, group_no, abort_on_error, body, checksum)
     end

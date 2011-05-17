@@ -6,7 +6,8 @@ module SML
 
   class ProcParameterValue
     def self.construct(array_rep)
-      choice = array_rep.shift.to_i
+      return nil if array_rep.nil?
+      choice = array_rep.shift
       body_rep = array_rep.shift
 
       return case choice

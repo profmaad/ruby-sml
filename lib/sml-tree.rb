@@ -12,7 +12,8 @@ module SML
     end
 
     def self.construct(array_rep)
-      parameter_name = array_rep.shift.to_s
+      return nil if array_rep.nil?
+      parameter_name = array_rep.shift
       parameter_value = SML::ProcParameterValue.construct(array_rep.shift)
       child_list = []
       array_rep.shift.each do |entry_array_rep|

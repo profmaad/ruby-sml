@@ -10,9 +10,10 @@ module SML
     end
 
     def self.construct(array_rep)
-      name = array_rep.shift.to_s
-      unit = array_rep.shift.to_i
-      scaler = array_rep.shift.to_i
+      return nil if array_rep.nil?
+      name = array_rep.shift
+      unit = array_rep.shift
+      scaler = array_rep.shift
 
       return SML::ProfileObjectHeaderEntry.new(name, unit, scaler)
     end

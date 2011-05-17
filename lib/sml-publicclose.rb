@@ -9,7 +9,8 @@ module SML
       end
 
       def self.construct(array_rep)
-        return SML::PublicClose::Request.new(array_rep.shift.to_s)
+        return nil if array_rep.nil?
+        return SML::PublicClose::Request.new(array_rep.shift)
       end
 
     end
@@ -22,7 +23,8 @@ module SML
       end
 
       def self.construct(array_rep)
-        return SML::PublicClose::Response.new(array_rep.shift.to_s)
+        return nil if array_rep.nil?
+        return SML::PublicClose::Response.new(array_rep.shift)
       end
 
     end

@@ -14,15 +14,16 @@ module SML
     end
 
     def self.construct(array_rep)
+      return nil if array_rep.nil?
       val_time = SML::Time.construct(array_rep.shift)
-      status = array_rep.shift.to_i
+      status = array_rep.shift
       value_list = []
       array_rep.shift.each do |entry_array_rep|
         entry = SML::ValueEntry.construct(entry_array_rep)
         return nil if entry.nil?
         value_list << entry
       end
-      period_signature = array_rep.shift.to_s
+      period_signature = array_rep.shift
 
       return nil if val_time.nil?
       return SML::ProfileObjectPeriodEntry.new(val_time, status, value_list, period_signature)

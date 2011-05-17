@@ -8,7 +8,8 @@ module SML
     end
 
     def self.construct(array_rep)
-      path_entry = array_rep.shift.to_s
+      return nil if array_rep.nil?
+      path_entry = array_rep.shift
       
       return SML::Treepath.new(path_entry)
     end

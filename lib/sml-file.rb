@@ -10,6 +10,7 @@ module SML
     end
 
     def self.construct(array_rep)
+      return nil if array_rep.nil?
       messages = []
       array_rep.each do |message_array|
         message = SML::Message.construct(message_array)

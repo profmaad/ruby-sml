@@ -17,13 +17,14 @@ module SML
       end
 
       def self.construct(array_rep)
-        codepage = array_rep.shift.to_s
-        client_id = array_rep.shift.to_s
-        request_file_id = array_rep.shift.to_s
-        server_id = array_rep.shift.to_s
-        username = array_rep.shift.to_s
-        password = array_rep.shift.to_s
-        sml_version = array_rep.shift.to_i
+        return nil if array_rep.nil?
+        codepage = array_rep.shift
+        client_id = array_rep.shift
+        request_file_id = array_rep.shift
+        server_id = array_rep.shift
+        username = array_rep.shift
+        password = array_rep.shift
+        sml_version = array_rep.shift
 
         return SML::PublicOpen::Request.new(codepage, client_id, request_file_id, server_id, username, password, sml_version)
       end
@@ -43,12 +44,13 @@ module SML
       end
 
       def self.construct(array_rep)
-        codepage = array_rep.shift.to_s
-        client_id = array_rep.shift.to_s
-        request_file_id = array_rep.shift.to_s
-        server_id = array_rep.shift.to_s
+        return nil if array_rep.nil?
+        codepage = array_rep.shift
+        client_id = array_rep.shift
+        request_file_id = array_rep.shift
+        server_id = array_rep.shift
         reference_time = SML::Time.construct(array_rep.shift)
-        sml_version = array_rep.shift.to_i
+        sml_version = array_rep.shift
 
         return nil if reference_time.nil?
         return SML::PublicOpen::Response.new(codepage, client_id, request_file_id, server_id, reference_time, sml_version)

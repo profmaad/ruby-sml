@@ -1,5 +1,3 @@
-require 'sml-value'
-
 module SML
   
   class ValueEntry
@@ -11,8 +9,9 @@ module SML
     end
 
     def self.construct(array_rep)
+      return nil if array_rep.nil?
       value = array_rep.shift
-      signature = array_rep.shift.to_s
+      signature = array_rep.shift
 
       return nil if value.nil?
       return SML::ValueEntry.new(value, signature)

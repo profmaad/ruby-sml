@@ -7,7 +7,6 @@ require 'lib/encoding-binary'
 require 'lib/sml-file'
 
 @inputFile = "test-data/request.sml"
-#@inputFile = "test-data/response.sml"
 
 io = File.open(@inputFile, 'rb')
 
