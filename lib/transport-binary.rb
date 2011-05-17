@@ -24,6 +24,32 @@ module SML
 
       return file
     end
+    def self.writefile(io, file)
+      source = String.new(file)
+
+      # add transport begin header
+      io << [0x1b1b1b1b, 0x01010101].pack('NN')
+
+      while not source.empty?
+        value = source.unpack('N')[0]
+        if value == 0x1b1b1b1b
+          io << [0x1b1b1b1b].pack('N')
+          io << source.slice!(0,4)
+        else
+          io << source.slice!(0,1)
+        end
+      end
+
+      # calculate padding length
+      padding_length = (4-(file.length % 4)) % 4
+
+      # add padding
+      padding_length.times do
+        io << 0x00
+      end
+      # add transmission end header
+      io << [0x1b1b1b1b, 0x1a, padding_length, 0x0000].pack('NCCn')
+    end
 
     def self.handle_escape(bytes)
       print "escape sequence: "

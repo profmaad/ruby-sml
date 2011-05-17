@@ -155,37 +155,96 @@ module SML
     def self.encode_file(file)
       result = String.new
 
-      file.each do |message|
-        result << encode_value(message) << 0x00
+      array_rep = Array.new(file)
+      array_rep.each do |message|
+        result << encode_value(message, :array) << 0x00
       end
 
       return result
     end
 
-    def self.encode_value(value)
+    def self.encode_value(value, type)
       result = String.new
 
-      case value
-      when Array
-        tl_bytes = encode_length(value.length)
+      case type
+      when :array
+        entries_with_type = []
+        while not value.empty?
+          entry = value.shift
+          type = case entry
+                 when Array
+                   :array
+                 when String
+                   :string
+                 when NilClass
+                   :nil
+                 when Fixnum
+                   value.shift
+                 end
+
+          entries_with_type << [entry, type]
+        end
+        
+        tl_bytes = encode_length(entries_with_type.length, false)
         tl_bytes[0] = 0b01110000 + tl_bytes[0]
-      when String
-        tl_bytes = encode_length(value.length)
+        tl_bytes.each do |byte|
+          result << byte
+        end
+        entries_with_type.each do |entry, type|
+          result << encode_value(entry,type)
+        end
+      when :string
+        tl_bytes = encode_length(value.length, true)
         tl_bytes[0] = 0b00000000 + tl_bytes[0]
-      when Fixnum
-        tl_bytes = encode_length(value.length)
-      when true
-        result << 0x42 << 0x01
-      when false
-        result << 0x42 << 0x00
-      when nil
+        tl_bytes.each do |byte|
+          result << byte
+        end
+        result << value
+      when :int8
+        result << 0x52 << [value].pack('c')
+      when :int16
+        result << 0x53
+        result << [value].pack('s').reverse
+      when :int32
+        result << 0x55
+        result << [value].pack('l').reverse
+      when :int64
+        result << 0x59
+        result << [value].pack('q').reverse
+      when :uint8
+        result << 0x62 << [value].pack('C')
+      when :uint16
+        result << 0x63 << [value].pack('n')
+      when :uint32
+        result << 0x65 << [value].pack('N')
+      when :uint64
+        result << 0x69 << [value].pack('Q').reverse
+      when :bool
+        if value == 0
+          result << 0x42 << 0x00
+        else          
+          result << 0x42 << 0x01
+        end
+      when :nil
         result << 0x01
       end
       
       return result
     end
-    def self.encode_length(length)
+    def self.encode_length(length, include_header)
       result = []
+
+      header_length = 1
+      while (length+(include_header ? header_length : 0)) >= 2**(4*header_length)
+        header_length += 1        
+      end
+      total_length = length + (include_header ? header_length : 0)
+
+      while header_length > 0
+        mask = 0xf << (header_length-1)*4
+        result << ((total_length & mask) >> (header_length-1)*4)
+        header_length -= 1
+      end
 
       return result
     end

@@ -7,6 +7,7 @@ require 'lib/encoding-binary'
 require 'lib/sml-file'
 
 @inputFile = "test-data/request.sml"
+@outputFile = "test-data/request_processed.sml"
 
 io = File.open(@inputFile, 'rb')
 
@@ -16,13 +17,15 @@ count = 0
 encodedFile.each_byte do |byte|
   print "0x%02x " % byte
   count += 1
-  if count > 8
+  if count > 7
     count = 0
     puts
   end
 end
 puts
 puts "-------------"
+
+io.close
 
 decodedFile = SML::BinaryEncoding.decode_file(encodedFile)
 puts "Decoded File:"
@@ -39,4 +42,20 @@ puts "Unparsed File:"
 pp sml_file_array_rep
 puts "-------------"
 
-io.close
+reencodedFile = SML::BinaryEncoding.encode_file(sml_file_array_rep)
+puts "Reencoded File:"
+count = 0
+reencodedFile.each_byte do |byte|
+  print "0x%02x " % byte
+  count += 1
+  if count > 7
+    count = 0
+    puts
+  end
+end
+puts
+puts "-------------"
+
+io_out = File.open(@outputFile, 'wb')
+SML::BinaryTransport.writefile(io_out, reencodedFile)
+io_out.close
