@@ -1,3 +1,4 @@
+require 'nilclass-mixin'
 require 'sml-tree'
 require 'sml-listentry'
 require 'sml-time'
@@ -25,6 +26,9 @@ module SML
         list_name = array_rep.shift
 
         return SML::GetList::Request.new(client_id, server_id, username, password, list_name)
+      end
+      def to_a
+        return [] << client_id << server_id << username << password << list_name
       end
 
     end
@@ -58,6 +62,14 @@ module SML
         act_gateway_time = SML::Time.construct(array_rep.shift)
 
         return SML::GetList::Response.new(client_id, server_id, list_name, act_sensor_time, value_list, list_signature, act_gateway_time)
+      end
+      def to_a
+        value_list_array = []
+        value_list.each do |value|
+          value_list_array << value.to_a
+        end
+
+        return [] << client_id << server_id << list_name << act_sensor_time.to_a << value_list_array << list_signature << act_gateway_time.to_a
       end
 
     end

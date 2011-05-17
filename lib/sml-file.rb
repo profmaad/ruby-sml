@@ -1,3 +1,4 @@
+require 'nilclass-mixin'
 require 'sml-message'
 
 module SML
@@ -22,6 +23,15 @@ module SML
 
       return file
     end
+    def to_a
+      result = []
+      messages.each do |message|
+        result << message.to_a
+      end
+
+      return result
+    end
+
   end
 
 end

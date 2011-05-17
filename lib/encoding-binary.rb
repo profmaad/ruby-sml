@@ -22,8 +22,8 @@ module SML
         
         # check for special cases
         if tl_byte == 0x00
-          puts "end of message"
-          puts "--------------"
+          # puts "end of message"
+          # puts "--------------"
           list_length = []
           list_depth = 0
 
@@ -35,8 +35,8 @@ module SML
           next
         end
         if tl_byte == 0x01
-          list_depth.times do print "\t" end
-          puts "?"
+          # list_depth.times do print "\t" end
+          # puts "?"
 
           current_list << nil
 
@@ -69,12 +69,12 @@ module SML
           type = :list
         else
           type = nil
-          puts "type: unknown (0b#{type_bits.to_s(2)})"
+          # puts "type: unknown (0b#{type_bits.to_s(2)})"
           exit
         end
 
         list_depth.times do
-          print "\t"
+          # print "\t"
         end
 
         if not list_length.empty?
@@ -98,7 +98,7 @@ module SML
         case type
         when :string
           value = source.slice!(0,length)
-          puts "string: #{value}"
+          # puts "string: #{value}"
           current_list << value
         when :bool
           value = source.slice!(0,1).unpack('C')[0]
@@ -107,7 +107,7 @@ module SML
           else
             value = true
           end
-          puts "bool: #{value}"
+          # puts "bool: #{value}"
           current_list << value
         when :signed
           value = 0
@@ -119,7 +119,7 @@ module SML
             bytes_left -= 1
           end
           value = to_signed(value, length*8)
-          puts "int#{length*8}: #{value}"
+          # puts "int#{length*8}: #{value}"
           current_list << value
         when :unsigned
           value = 0
@@ -130,10 +130,10 @@ module SML
             value |= byte
             bytes_left -= 1
           end
-          puts "uint#{length*8}: #{value}"
+          # puts "uint#{length*8}: #{value}"
           current_list << value
         when :list
-          puts "list: #{length} elements"
+          # puts "list: #{length} elements"
           list_depth += 1
           list_length.push(length)
           new_list = []

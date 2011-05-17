@@ -1,3 +1,4 @@
+require 'nilclass-mixin'
 require 'sml-treepath'
 require 'sml-tree'
 
@@ -26,6 +27,9 @@ module SML
         return nil if parameter_treepath.nil?
         return SML::GetProcParameter::Request.new(server_id, username, password, parameter_treepath, attribute)
       end
+      def to_a
+        return [] << server_id << username << password << parameter_treepath.to_a << attribute
+      end
 
     end
 
@@ -46,6 +50,9 @@ module SML
 
         return nil if (server_id.nil? or parameter_treepath.nil? or parameter_tree.nil?)
         return SML::GetProcParameter::Response.new(server_id, parameter_treepath, parameter_tree)
+      end
+      def to_a
+        return [] << server_id << parameter_treepath.to_a << parameter_tree.to_a
       end
 
     end

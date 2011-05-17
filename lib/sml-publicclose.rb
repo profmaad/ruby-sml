@@ -1,3 +1,5 @@
+require 'nilclass-mixin'
+
 module SML
   module PublicClose
 
@@ -12,6 +14,9 @@ module SML
         return nil if array_rep.nil?
         return SML::PublicClose::Request.new(array_rep.shift)
       end
+      def to_a
+        return [] << global_signature
+      end
 
     end
     
@@ -25,6 +30,9 @@ module SML
       def self.construct(array_rep)
         return nil if array_rep.nil?
         return SML::PublicClose::Response.new(array_rep.shift)
+      end
+      def to_a
+        return [] << global_signature
       end
 
     end

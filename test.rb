@@ -25,11 +25,18 @@ puts
 puts "-------------"
 
 decodedFile = SML::BinaryEncoding.decode_file(encodedFile)
-puts "Decoded FIle:"
+puts "Decoded File:"
 pp decodedFile
 puts "-------------"
 
 sml_file = SML::File.construct(decodedFile)
+puts "Parsed File:"
 pp sml_file
+puts "-------------"
+
+sml_file_array_rep = sml_file.to_a
+puts "Unparsed File:"
+pp sml_file_array_rep
+puts "-------------"
 
 io.close

@@ -1,3 +1,4 @@
+require 'nilclass-mixin'
 require 'sml-tree'
 
 module SML
@@ -21,6 +22,9 @@ module SML
         details = SML::Tree.construct(array_rep.shift)
 
         return SML::Attention::Response.new(server_id, number, message, details)
+      end
+      def to_a
+       return [] << server_id << number << message < details.to_a
       end
 
     end

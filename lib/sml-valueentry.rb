@@ -1,3 +1,5 @@
+require 'nilclass-mixin'
+
 module SML
   
   class ValueEntry
@@ -15,6 +17,9 @@ module SML
 
       return nil if value.nil?
       return SML::ValueEntry.new(value, signature)
+    end
+    def to_a
+      return [] << value << signature
     end
 
   end

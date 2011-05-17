@@ -1,3 +1,4 @@
+require 'nilclass-mixin'
 require 'sml-time'
 
 module SML
@@ -27,6 +28,9 @@ module SML
 
       return nil if value.nil?
       return SML::ListEntry.new(name, status, value_time, unit, scaler, value, signature)
+    end
+    def to_a
+      return [] << name << status << value_time.to_a << unit << scaler << value << signature
     end
 
   end

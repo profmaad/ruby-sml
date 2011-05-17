@@ -1,3 +1,4 @@
+require 'nilclass-mixin'
 require 'sml-time'
 require 'sml-treepath'
 require 'sml-periodentry'
@@ -34,6 +35,9 @@ module SML
 
         return nil if parameter_treepath.nil?
         return SML::GetProfileList::Request.new(server_id, username, password, with_raw_data, begin_time, end_time, parameter_treepath, object_list, das_details)
+      end
+      def to_a
+        return [] << server_id << username << password << with_raw_data << begin_time.to_a << end_time.to_a << parameter_treepath.to_a << object_list << das_details.to_a
       end
 
     end
@@ -72,6 +76,14 @@ module SML
 
         return nil if (act_time.nil? or parameter_treepath.nil? or val_time.nil?)
         return SML::GetProfileList::Response.new(server_id, act_time, registration_period, parameter_treepath, val_time, status, period_list, raw_data, period_signature)
+      end
+      def to_a
+        period_list_array = []
+        period_list.each do |entry|
+          period_list_array << entry.to_a
+        end
+
+        return [] << server_id << act_time.to_a << registration_period << parameter_treepath.to_a << val_time.to_a << status << period_list_array << raw_data << period_signature
       end
       
     end

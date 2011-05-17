@@ -1,3 +1,5 @@
+require 'nilclass-mixin'
+
 module SML
 
   class Time
@@ -20,6 +22,16 @@ module SML
       value = array_rep.shift
 
       return SML::Time.new(type, value)
+    end
+    def to_a
+      choice = case type
+               when :seconds_index
+                 0x01
+               when :timestamp
+                 0x02
+               end
+
+      return [] << choice << value
     end
 
   end

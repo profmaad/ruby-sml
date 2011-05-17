@@ -1,3 +1,4 @@
+require 'nilclass-mixin'
 require 'sml-time'
 
 module SML
@@ -28,6 +29,9 @@ module SML
 
         return SML::PublicOpen::Request.new(codepage, client_id, request_file_id, server_id, username, password, sml_version)
       end
+      def to_a
+        return [] << codepage << client_id << request_file_id << server_id << username << password << sml_version
+      end
       
     end
 
@@ -54,6 +58,9 @@ module SML
 
         return nil if reference_time.nil?
         return SML::PublicOpen::Response.new(codepage, client_id, request_file_id, server_id, reference_time, sml_version)
+      end
+      def to_a
+         return [] << codepage << client_id << request_file_id << server_id << reference_time.to_a << sml_version
       end
 
     end

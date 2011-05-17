@@ -1,3 +1,5 @@
+require 'nilclass-mixin'
+
 module SML
 
   class ProfileObjectHeaderEntry
@@ -16,6 +18,9 @@ module SML
       scaler = array_rep.shift
 
       return SML::ProfileObjectHeaderEntry.new(name, unit, scaler)
+    end
+    def to_a
+      return [] << name << unit << scaler
     end
 
   end

@@ -1,3 +1,4 @@
+require 'nilclass-mixin'
 require 'sml-publicopen'
 require 'sml-publicclose'
 require 'sml-getprofilepack'
@@ -10,6 +11,7 @@ require 'sml-attention'
 module SML
 
   class MessageBody
+
     def self.construct(array_rep)
       return nil if array_rep.nil?
       choice = array_rep.shift
@@ -50,6 +52,41 @@ module SML
                SML::Attention::Response.construct(body_array)
              end      
     end
+    def self.to_a(object)
+      choice = case object
+               when SML::PublicOpen::Request
+                 0x0100
+               when SML::PublicOpen::Response
+                 0x0101
+               when SML::PublicClose::Request
+                 0x0200
+               when SML::PublicClose::Response
+                 0x0201
+               when SML::GetProfilePack::Request
+                 0x0300
+               when SML::GetProfilePack::Response
+                 0x0301
+               when SML::GetProfileList::Request
+                 0x0400
+               when SML::GetProfileList::Response
+                 0x0401
+               when SML::GetProcParameter::Request
+                 0x0500
+               when SML::GetProcParameter::Response
+                 0x0501
+               when SML::SetProcParameter::Request
+                 0x0600
+               when SML::GetList::Request
+                 0x0700
+               when SML::GetList::Response
+                 0x0701
+               when SML::Attention::Response
+                 0xff01
+               end
+
+      return [] << choice << object.to_a
+    end
+
   end
 
 end

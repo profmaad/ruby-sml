@@ -1,3 +1,5 @@
+require 'nilclass-mixin'
+
 module SML
 
   class PeriodEntry
@@ -21,6 +23,9 @@ module SML
 
       return nil if value.nil?
       return SML::PeriodEntry.new(name, unit, scaler, value, signature)
+    end
+    def to_a
+      return [] << name << unit << scaler << value << signature
     end
 
   end

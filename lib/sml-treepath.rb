@@ -1,3 +1,5 @@
+require 'nilclass-mixin'
+
 module SML
 
   class Treepath
@@ -12,6 +14,9 @@ module SML
       path_entry = array_rep.shift
       
       return SML::Treepath.new(path_entry)
+    end
+    def to_a
+      return [] << path_entry
     end
 
   end

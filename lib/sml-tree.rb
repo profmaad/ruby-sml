@@ -1,3 +1,4 @@
+require 'nilclass-mixin'
 require 'sml-procparametervalue'
 
 module SML
@@ -23,6 +24,14 @@ module SML
       end
 
       return SML::Tree.new(parameter_name, parameter_value, child_list)
+    end
+    def to_a
+      child_list_array = []
+      child_list.each do |entry|
+        child_list_array << entry.to_a
+      end
+
+      return [] << parameter_name << SML::ProcParameterValue.to_a(parameter_value) << child_list_array
     end
 
   end

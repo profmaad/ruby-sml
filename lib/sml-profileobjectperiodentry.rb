@@ -1,3 +1,4 @@
+require 'nilclass-mixin'
 require 'sml-time'
 require 'sml-valueentry'
 
@@ -27,6 +28,14 @@ module SML
 
       return nil if val_time.nil?
       return SML::ProfileObjectPeriodEntry.new(val_time, status, value_list, period_signature)
+    end
+    def to_a
+      value_list_array = []
+      value_list.each do |entry|
+        value_list_array << entry.to_a
+      end
+      
+      return [] << val_time.to_a << status << value_list_array << period_signature
     end
 
   end
