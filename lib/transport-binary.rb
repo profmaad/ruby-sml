@@ -55,7 +55,7 @@ module SML
 
       # calculate checksum
       checksum = CRC16.crc16(result)
-      result << [checksum].pack('n')
+      result << [(checksum & 0x00ff), ((checksum >> 8) & 0x00ff)].pack('CC')
 
       io << result
     end
