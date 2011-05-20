@@ -6,6 +6,7 @@ module SML
 
     def self.readfile(io)
       file = String.new
+      checksum = String.new
       
       while not io.eof?
         bytes = io.read(4).unpack('N')[0]
@@ -14,15 +15,21 @@ module SML
           4.times do
             escape.push(io.read(1).unpack('C')[0])
           end
-          if handle_escape(escape) == 1
+          escape_return = handle_escape(escape)
+          case escape_return
+          when 1           
             4.times do
               file << [0x1b].pack('C')
             end
+          when String
+            checksum = escape_return
           end
         else
           file << [bytes].pack('N')
         end
       end
+
+      puts "0x%04x" % checksum.unpack('n')[0]
 
       return file
     end
@@ -66,6 +73,7 @@ module SML
         puts "data transmission v1"
       elsif bytes[0] == 0x1a
         puts "end of data transmission (padding: #{bytes[1]}, checksum: 0x#{bytes[2].to_s(16)}#{bytes[3].to_s(16)})"
+        return "" << bytes[2] << bytes[3]
       elsif bytes[0] == 0x02
         puts "data transmission v2"
       elsif bytes[0] == 0x03
