@@ -2,9 +2,9 @@ require 'pp'
 
 $: << "./lib"
 
-require 'lib/transport-binary'
-require 'lib/encoding-binary'
-require 'lib/sml-file'
+require 'transport-binary'
+require 'encoding-binary'
+require 'sml-file'
 
 @inputFile = "test-data/request.sml"
 @outputFile = "test-data/request_processed.sml"
