@@ -1,3 +1,6 @@
+require 'digest/sha2'
+require 'openssl'
+
 require 'nilclass-mixin'
 require 'sml-time'
 
@@ -37,6 +40,45 @@ module SML
       return [] << name << status << status_type << value_time.to_a << unit << scaler << value << value_type << signature
     end
 
+    def calculate_hash(server_id)
+      return nil if [:int8, :int16, :int32, :int64, :uint8, :uint16, :uint32, :uint64].index(@value_type).nil?
+      return nil unless @value_time.type == :timestamp
+      return nil unless @name.length == 6
+
+      bytes = String.new
+      bytes += server_id
+      (10-server_id.length).times do
+        bytes += [0x00].pack('c')
+      end
+      bytes += [@value_time.value].pack('N')
+      bytes += [@status].pack('c')
+      bytes += @name
+      bytes += [@unit].pack('c')
+      bytes += [@scaler].pack('c')
+      bytes += [(@value & 0xffff0000) >> 32,(@value & 0x0000ffff)].pack('NN')
+      17.times do
+        bytes += [0x00].pack('c')
+      end
+
+      hash = Digest::SHA2.new(256).digest(bytes)[0,24]
+      
+      return hash
+    end
+    def sign(server_id, private_key)
+      hash = calculate_hash(server_id)
+      return nil if hash.nil?
+
+      signature = OpenSSL::PKey::EC.new(private_key).dsa_sign_asn1(hash)
+
+      @signature = signature
+    end
+    def verify(server_id, public_key)
+      hash = calculate_hash(server_id)
+      return nil if hash.nil?
+      
+      return OpenSSL::PKey::EC.new(public_key).dsa_verify_asn1(hash,@signature)
+    end
+        
   end
 
 end
