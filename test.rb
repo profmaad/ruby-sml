@@ -12,6 +12,11 @@ require 'sml-file'
 io = File.open(@inputFile, 'rb')
 
 encodedFile = SML::BinaryTransport.readfile(io)
+if encodedFile.nil?
+  puts "binary transport checksum invalid, exiting"
+  io.close
+  exit 1
+end
 puts "Encoded File:"
 count = 0
 encodedFile.each_byte do |byte|

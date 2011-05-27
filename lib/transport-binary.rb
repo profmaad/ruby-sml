@@ -6,31 +6,43 @@ module SML
 
     def self.readfile(io)
       file = String.new
-      checksum = String.new
+      received_checksum_bytes = String.new
+      raw = String.new
       
       while not io.eof?
-        bytes = io.read(4).unpack('N')[0]
+        bytes_raw = io.read(4)
+        raw << bytes_raw
+        bytes = bytes_raw.unpack('N')[0]
         if bytes == 0x1b1b1b1b
           escape = []
           4.times do
-            escape.push(io.read(1).unpack('C')[0])
+            byte = io.read(1)
+            raw << byte
+            escape.push(byte.unpack('C')[0])
           end
           escape_return = handle_escape(escape)
           case escape_return
-          when 1           
+          when 1
             4.times do
               file << [0x1b].pack('C')
             end
           when String
-            checksum = escape_return
+            received_checksum_bytes = escape_return
           end
         else
           file << [bytes].pack('N')
         end
       end
 
-      puts "0x%04x" % checksum.unpack('n')[0]
+      # calculate CRC16 over all received bytes (except last 2 - they contain the checksum itself)
+      raw.chop!.chop!
+      calculated_checksum = CRC16.crc16(raw)
+      calculated_checksum = (calculated_checksum ^ 0xffff)
+      calculated_checksum = ((calculated_checksum & 0xff00) >> 8) | ((calculated_checksum & 0x00ff) << 8)
+      # unpack the checksum we received
+      received_checksum = received_checksum_bytes.unpack('n')[0]
 
+      return nil unless calculated_checksum == received_checksum
       return file
     end
     def self.writefile(io, file)
@@ -62,6 +74,7 @@ module SML
 
       # calculate checksum
       checksum = CRC16.crc16(result)
+      checksum = (checksum ^ 0xffff)
       result << [(checksum & 0x00ff), ((checksum >> 8) & 0x00ff)].pack('CC')
 
       io << result
