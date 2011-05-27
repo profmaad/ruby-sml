@@ -33,7 +33,7 @@ module SML
       value_type = array_rep.shift
       signature = array_rep.shift
 
-      return nil if value.nil?
+      return nil if (value.nil? or name.nil?)
       return SML::ListEntry.new(name, status, status_type, value_time, unit, scaler, value, value_type, signature)
     end
     def to_a
