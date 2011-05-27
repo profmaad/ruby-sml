@@ -27,6 +27,11 @@ module SML
 
         return SML::GetList::Request.new(client_id, server_id, username, password, list_name)
       end
+
+      def self.pconstrut(o={})
+        return SML::GetList::Request.new(o[:client_id], o[:server_id], o[:username], o[:password], o[:list_name])
+      end
+
       def to_a
         return [] << client_id << server_id << username << password << list_name
       end
@@ -63,6 +68,11 @@ module SML
 
         return SML::GetList::Response.new(client_id, server_id, list_name, act_sensor_time, value_list, list_signature, act_gateway_time)
       end
+
+      def self.pconstruct(o={})
+        return SML::GetList::Response.new(o[:client_id], o[:server_id], o[:list_name], o[:act_sensor_time], o[:value_list], o[:list_signature], o[:act_gateway_time])
+      end
+
       def to_a
         value_list_array = []
         value_list.each do |value|

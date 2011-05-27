@@ -38,7 +38,7 @@ module SML
     end
 
     def self.pconstruct(o={})
-      return SML::ListEntry.construct([o[:name], o[:status], o[:status_type], o[:value_time], o[:unit], o[:scaler], o[:value], o[:value_type], o[:signature]])
+      return SML::ListEntry.new(o[:name], o[:status], o[:status_type], o[:value_time], o[:unit], o[:scaler], o[:value], o[:value_type], o[:signature])
     end
 
     def to_a

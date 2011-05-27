@@ -40,6 +40,11 @@ module SML
       return nil unless array_rep.shift == :end_of_message
       return SML::Message.new(transaction_id, group_no, abort_on_error, body, checksum)
     end
+
+    def self.pconstruct(o={})
+      return SML::Message.new(o[:transaction_id], o[:group_no], o[:abord_on_error], o[:body], o[:checksum])
+    end
+
     def to_a
       abort_on_error_code = case abort_on_error
                             when :continue
