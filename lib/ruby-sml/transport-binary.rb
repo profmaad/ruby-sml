@@ -1,4 +1,4 @@
-require 'crc16'
+require 'ruby-sml/crc16'
 
 module SML
 

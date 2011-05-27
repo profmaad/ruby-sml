@@ -1,5 +1,5 @@
-require 'nilclass-mixin'
-require 'sml-procparametervalue'
+require 'ruby-sml/nilclass-mixin'
+require 'ruby-sml/sml-procparametervalue'
 
 module SML
 

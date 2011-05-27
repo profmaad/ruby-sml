@@ -1,5 +1,5 @@
-require 'nilclass-mixin'
-require 'sml-messagebody'
+require 'ruby-sml/nilclass-mixin'
+require 'ruby-sml/sml-messagebody'
 
 module SML
 

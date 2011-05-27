@@ -1,7 +1,7 @@
-require 'nilclass-mixin'
-require 'sml-tree'
-require 'sml-listentry'
-require 'sml-time'
+require 'ruby-sml/nilclass-mixin'
+require 'ruby-sml/sml-tree'
+require 'ruby-sml/sml-listentry'
+require 'ruby-sml/sml-time'
 
 module SML
   module GetList

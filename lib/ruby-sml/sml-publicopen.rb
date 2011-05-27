@@ -1,5 +1,5 @@
-require 'nilclass-mixin'
-require 'sml-time'
+require 'ruby-sml/nilclass-mixin'
+require 'ruby-sml/sml-time'
 
 module SML
   module PublicOpen

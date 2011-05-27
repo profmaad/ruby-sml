@@ -1,6 +1,6 @@
-require 'nilclass-mixin'
-require 'sml-time'
-require 'sml-valueentry'
+require 'ruby-sml/nilclass-mixin'
+require 'ruby-sml/sml-time'
+require 'ruby-sml/sml-valueentry'
 
 module SML
   

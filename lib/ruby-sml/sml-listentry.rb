@@ -1,8 +1,8 @@
 require 'digest/sha2'
 require 'openssl'
 
-require 'nilclass-mixin'
-require 'sml-time'
+require 'ruby-sml/nilclass-mixin'
+require 'ruby-sml/sml-time'
 
 module SML
 

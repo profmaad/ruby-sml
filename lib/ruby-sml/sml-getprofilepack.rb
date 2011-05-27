@@ -1,10 +1,12 @@
-require 'nilclass-mixin'
-require 'sml-time'
-require 'sml-treepath'
-require 'sml-periodentry'
+require 'ruby-sml/nilclass-mixin'
+require 'ruby-sml/sml-time'
+require 'ruby-sml/sml-treepath'
+require 'ruby-sml/sml-tree'
+require 'ruby-sml/sml-profileobjectheaderentry'
+require 'ruby-sml/sml-profileobjectperiodentry'
 
 module SML
-  module GetProfileList
+  module GetProfilePack
 
     class Request
       attr_accessor :server_id, :username, :password, :with_raw_data, :begin_time, :end_time, :parameter_treepath, :object_list, :das_details
@@ -35,30 +37,28 @@ module SML
         das_details = SML::Tree.construct(array_rep.shift)
 
         return nil if parameter_treepath.nil?
-        return SML::GetProfileList::Request.new(server_id, username, password, with_raw_data, begin_time, end_time, parameter_treepath, object_list, das_details)
+        return SML::GetProfilePack::Request.new(server_id, username, password, with_raw_data, begin_time, end_time, parameter_treepath, object_list, das_details)
       end
       def to_a
         result = [] << server_id << username << password << with_raw_data
         result << :bool unless with_raw_data.nil?
-        
         return result << begin_time.to_a << end_time.to_a << parameter_treepath.to_a << object_list << das_details.to_a
       end
 
     end
 
     class Response
-      attr_accessor :server_id, :act_time, :registration_period, :parameter_treepath, :val_time, :status, :period_list, :raw_data, :period_signature
-
-      def initialize(server_id, act_time, registration_period, parameter_treepath, val_time, status, period_list, raw_data, period_signature)
+      attr_accessor :server_id, :act_time, :register_period, :parameter_treepath, :header_list, :period_list, :raw_data, :profile_signature
+      
+      def initialize(server_id, act_time, register_period, parameter_treepath, header_list, period_list, raw_data, profile_signature)
         @server_id = server_id
         @act_time = act_time
-        @registration_period = registration_period
+        @register_period = register_period
         @parameter_treepath = parameter_treepath
-        @val_time = val_time
-        @status = status
+        @header_list = header_list
         @period_list = period_list
         @raw_data = raw_data
-        @period_signature = period_signature
+        @profile_signature = profile_signature
       end
 
       def self.construct(array_rep)
@@ -68,22 +68,29 @@ module SML
         registration_period = array_rep.shift
         array_rep.shift unless registration_period.nil?
         parameter_treepath = SML::Treepath.construct(array_rep.shift)
-        val_time = SML::Time.construct(array_rep.shift)
-        status = array_rep.shift
-        array_rep.shift unless status.nil?
+        header_list = []
+        array_rep.shift.each do |entry_array_rep|
+          entry = SML::ProfileObjectHeaderEntry.construct(entry_array_rep)
+          return nil if entry.nil?
+          header_list << entry
+        end
         period_list = []
         array_rep.shift.each do |entry_array_rep|
-          entry = SML::PeriodEntry.construct(entry_array_rep)
+          entry = SML::ProfileObjectPeriodEntry.construct(entry_array_rep)
           return nil if entry.nil?
           period_list << entry
         end
         raw_data = array_rep.shift
-        period_signature = array_rep.shift
+        profile_signature = array_rep.shift
 
-        return nil if (act_time.nil? or parameter_treepath.nil? or val_time.nil?)
-        return SML::GetProfileList::Response.new(server_id, act_time, registration_period, parameter_treepath, val_time, status, period_list, raw_data, period_signature)
+        return nil if (act_time.nil? or parameter_treepath.nil?)
+        return SML::GetProfilePack::Response.new(server_id, act_time, registration_period, parameter_treepath, header_list, period_list, raw_data, profile_signature)
       end
       def to_a
+        header_list_array = []
+        header_list.each do |entry|
+          header_list_array << entry.to_a
+        end
         period_list_array = []
         period_list.each do |entry|
           period_list_array << entry.to_a
@@ -91,13 +98,10 @@ module SML
 
         result = [] << server_id << act_time.to_a << registration_period
         result << :uint32 unless registration_period.nil?
-        result << parameter_treepath.to_a << val_time.to_a << status
-        result << :uint64 unless status.nil?
-
-        return result << period_list_array << raw_data << period_signature
+        return result << parameter_treepath.to_a << header_list_array << period_list_array << raw_data << profile_signature
       end
-      
-    end
 
+    end
+    
   end
 end
