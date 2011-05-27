@@ -1,8 +1,8 @@
 require 'digest/sha2'
 require 'openssl'
 
-require 'nilclass-mixin'
-require 'sml-time'
+require 'ruby-sml/nilclass-mixin'
+require 'ruby-sml/sml-time'
 
 module SML
 
@@ -46,7 +46,7 @@ module SML
     end
 
     def calculate_hash(server_id)
-      return nil if [:int8, :int16, :int32, :int64, :uint8, :uint16, :uint32, :uint64].index(@value_type).nil?
+      return nil unless [:int8, :int16, :int32, :int64, :uint8, :uint16, :uint32, :uint64].include?(@value_type)
       return nil unless @value_time.type == :timestamp
       return nil unless @name.length == 6
 

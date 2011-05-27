@@ -1,12 +1,12 @@
-require 'nilclass-mixin'
-require 'sml-publicopen'
-require 'sml-publicclose'
-require 'sml-getprofilepack'
-require 'sml-getprofilelist'
-require 'sml-getprocparameter'
-require 'sml-setprocparameter'
-require 'sml-getlist'
-require 'sml-attention'
+require 'ruby-sml/nilclass-mixin'
+require 'ruby-sml/sml-publicopen'
+require 'ruby-sml/sml-publicclose'
+require 'ruby-sml/sml-getprofilepack'
+require 'ruby-sml/sml-getprofilelist'
+require 'ruby-sml/sml-getprocparameter'
+require 'ruby-sml/sml-setprocparameter'
+require 'ruby-sml/sml-getlist'
+require 'ruby-sml/sml-attention'
 
 module SML
 

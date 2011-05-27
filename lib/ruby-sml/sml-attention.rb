@@ -1,5 +1,5 @@
-require 'nilclass-mixin'
-require 'sml-tree'
+require 'ruby-sml/nilclass-mixin'
+require 'ruby-sml/sml-tree'
 
 module SML
   module Attention

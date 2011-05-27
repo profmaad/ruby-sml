@@ -1,4 +1,4 @@
-require 'nilclass-mixin'
+require 'ruby-sml/nilclass-mixin'
 
 module SML
   module PublicClose

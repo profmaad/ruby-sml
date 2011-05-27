@@ -1,7 +1,7 @@
-require 'nilclass-mixin'
-require 'sml-periodentry'
-require 'sml-tupelentry'
-require 'sml-time'
+require 'ruby-sml/nilclass-mixin'
+require 'ruby-sml/sml-periodentry'
+require 'ruby-sml/sml-tupelentry'
+require 'ruby-sml/sml-time'
 
 module SML
 

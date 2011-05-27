@@ -4,7 +4,7 @@ module CRC16
   
   def self.crc16(buf, crc=0xffff)
     buf.each_byte{|x| crc = (crc >> 8) ^ CCITT_16[(crc ^ x) & 0xff]}
-    return (crc ^ 0xffff)
+    return crc
   end
   
   private

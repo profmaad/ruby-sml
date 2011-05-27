@@ -1,6 +1,6 @@
-require 'nilclass-mixin'
-require 'sml-treepath'
-require 'sml-tree'
+require 'ruby-sml/nilclass-mixin'
+require 'ruby-sml/sml-treepath'
+require 'ruby-sml/sml-tree'
 
 module SML
   module GetProcParameter
