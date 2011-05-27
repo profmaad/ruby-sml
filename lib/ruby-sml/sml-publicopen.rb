@@ -30,6 +30,11 @@ module SML
 
         return SML::PublicOpen::Request.new(codepage, client_id, request_file_id, server_id, username, password, sml_version)
       end
+
+      def self.pconstruct(o={})
+        return SML::PublicOpen::Request.new(o[:codepage], o[:client_id], o[:request_file_id], o[:server_id], o[:username], o[:password], o[:sml_version])
+      end
+
       def to_a
         result = [] << codepage << client_id << request_file_id << server_id << username << password << sml_version
         result << :uint8 unless sml_version.nil?
@@ -63,6 +68,11 @@ module SML
         return nil if reference_time.nil?
         return SML::PublicOpen::Response.new(codepage, client_id, request_file_id, server_id, reference_time, sml_version)
       end
+
+      def self.pconstruct(o={})
+        return SML::PublicOpen::Response.new(o[:codepage], o[:client_id], o[:request_file_id], o[:server_id], o[:username], o[:password], o[:sml_version])
+      end
+
       def to_a
         result = [] << codepage << client_id << request_file_id << server_id << reference_time.to_a << sml_version
         result << :uint8 unless sml_version.nil?

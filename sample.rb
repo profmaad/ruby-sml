@@ -1,6 +1,6 @@
 require 'pp'
 
-$: << "./lib"
+$: << "./lib/ruby-sml"
 
 require 'transport-binary'
 require 'encoding-binary'

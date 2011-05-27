@@ -36,6 +36,11 @@ module SML
       return nil if (value.nil? or name.nil?)
       return SML::ListEntry.new(name, status, status_type, value_time, unit, scaler, value, value_type, signature)
     end
+
+    def self.pconstruct(o={})
+      return SML::ListEntry.new(o[:name], o[:status], o[:status_type], o[:value_time], o[:unit], o[:scaler], o[:value], o[:value_type], o[:signature])
+    end
+
     def to_a
       return [] << name << status << status_type << value_time.to_a << unit << scaler << value << value_type << signature
     end

@@ -14,6 +14,11 @@ module SML
         return nil if array_rep.nil?
         return SML::PublicClose::Request.new(array_rep.shift)
       end
+
+      def self.pconstruct(o={})
+        return SML::PublicClose::Request.new(o[:global_signature])
+      end
+
       def to_a
         return [] << global_signature
       end
@@ -31,6 +36,11 @@ module SML
         return nil if array_rep.nil?
         return SML::PublicClose::Response.new(array_rep.shift)
       end
+
+      def self.pconstruct(o={})
+        return SML::PublicClose::Response.new(o[:global_signature])
+      end
+
       def to_a
         return [] << global_signature
       end
