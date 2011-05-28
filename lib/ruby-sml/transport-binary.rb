@@ -20,7 +20,7 @@ module SML
             raw << byte
             escape.push(byte.unpack('C')[0])
           end
-          escape_return = handle_escape(escape)
+          escape_return, padding_length = handle_escape(escape)
           case escape_return
           when 1
             4.times do
@@ -43,7 +43,7 @@ module SML
       received_checksum = received_checksum_bytes.unpack('n')[0]
 
       return nil unless calculated_checksum == received_checksum
-      return file
+      return file[0..-(padding_length+1)]
     end
     def self.writefile(io, file)
       source = String.new(file)
@@ -86,7 +86,7 @@ module SML
         puts "data transmission v1"
       elsif bytes[0] == 0x1a
         puts "end of data transmission (padding: #{bytes[1]}, checksum: 0x#{bytes[2].to_s(16)}#{bytes[3].to_s(16)})"
-        return "" << bytes[2] << bytes[3]
+        return "" << bytes[2] << bytes[3], bytes[1]
       elsif bytes[0] == 0x02
         puts "data transmission v2"
       elsif bytes[0] == 0x03
@@ -95,13 +95,13 @@ module SML
         puts "v2 set block size"
       elsif bytes[0] == 0x1b and bytes[1] == 0x1b and bytes[2] == 0x1b and bytes[3] == 0x1b
         puts "literal escape :("
-        return 1
+        return 1, 0
       else
         print "unknown ["
         print "0x%08x" % escape
         puts "]"
       end
-      return 0
+      return 0, 0
     end
   end
 
