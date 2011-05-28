@@ -25,6 +25,11 @@ module SML
 
       return SML::Time.new(type, value)
     end
+
+    def self.pconstruct(o={})
+      return SML::Time.new(o[:type], o[:value])
+    end
+
     def to_a
       choice = case type
                when :seconds_index
