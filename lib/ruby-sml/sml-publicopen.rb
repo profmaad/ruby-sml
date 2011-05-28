@@ -70,7 +70,7 @@ module SML
       end
 
       def self.pconstruct(o={})
-        return SML::PublicOpen::Response.new(o[:codepage], o[:client_id], o[:request_file_id], o[:server_id], o[:username], o[:password], o[:sml_version])
+        return SML::PublicOpen::Response.new(o[:codepage], o[:client_id], o[:request_file_id], o[:server_id], o[:reference_time], o[:sml_version])
       end
 
       def to_a
