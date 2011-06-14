@@ -187,6 +187,9 @@ module SML
         
         tl_bytes = encode_length(entries_with_type.length, false)
         tl_bytes[0] = 0b01110000 + tl_bytes[0]
+        if tl_bytes.size > 1
+          tl_bytes[0] |= 0b10000000
+        end
         tl_bytes.each do |byte|
           result << byte
         end
@@ -196,6 +199,9 @@ module SML
       when :string
         tl_bytes = encode_length(value.length, true)
         tl_bytes[0] = 0b00000000 + tl_bytes[0]
+        if tl_bytes.size > 1
+          tl_bytes[0] |= 0b10000000
+        end
         tl_bytes.each do |byte|
           result << byte
         end
