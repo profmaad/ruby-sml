@@ -25,12 +25,14 @@ module SML
       return nil if array_rep.nil?
       name = array_rep.shift
       status = array_rep.shift
-      status_type = array_rep.shift
+      status_type = array_rep.shift unless status.nil?
       value_time = SML::Time.construct(array_rep.shift)
       unit = array_rep.shift
+      array_rep.shift unless unit.nil?
       scaler = array_rep.shift
+      array_rep.shift unless scaler.nil?
       value = array_rep.shift
-      value_type = array_rep.shift
+      value_type = array_rep.shift if value.class == Fixnum
       signature = array_rep.shift
 
       return nil if (value.nil? or name.nil?)

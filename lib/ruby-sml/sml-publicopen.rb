@@ -65,7 +65,6 @@ module SML
         sml_version = array_rep.shift
         array_rep.shift unless sml_version.nil?
 
-        return nil if reference_time.nil?
         return SML::PublicOpen::Response.new(codepage, client_id, request_file_id, server_id, reference_time, sml_version)
       end
 
