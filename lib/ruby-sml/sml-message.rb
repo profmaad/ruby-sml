@@ -1,6 +1,8 @@
 require 'ruby-sml/nilclass-mixin'
 require 'ruby-sml/sml-messagebody'
 
+require 'ruby-sml/encoding-binary'
+
 module SML
 
   class Message
@@ -46,6 +48,11 @@ module SML
     end
 
     def to_a
+      calculate_checksum
+      return to_a_internal
+    end
+
+    def to_a_internal
       abort_on_error_code = case abort_on_error
                             when :continue
                               0x00
@@ -64,6 +71,15 @@ module SML
       result << SML::MessageBody.to_a(body) << checksum
       result << :uint16 unless checksum.nil?
       return result << :end_of_message
+    end
+
+    def calculate_checksum
+      encoded = SML::BinaryEncoding.encode_value(self.to_a_internal, :array)
+      encoded.slice!(-3,3)
+      calculated_checksum = CRC16.crc16(encoded)
+      calculated_checksum = (calculated_checksum ^ 0xffff)
+      calculated_checksum = ((calculated_checksum & 0xff00) >> 8) | ((calculated_checksum & 0x00ff) << 8)
+      @checksum = calculated_checksum   
     end
 
   end
