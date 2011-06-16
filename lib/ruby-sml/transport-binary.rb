@@ -28,6 +28,7 @@ module SML
             end
           when String
             received_checksum_bytes = escape_return
+            break
           end
         else
           file << [bytes].pack('N')
