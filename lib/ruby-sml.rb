@@ -26,3 +26,5 @@ require 'ruby-sml/sml-tupelentry'
 require 'ruby-sml/sml-valueentry'
 
 require 'ruby-sml/units'
+require 'ruby-sml/obis'
+require 'ruby-sml/helpers'
