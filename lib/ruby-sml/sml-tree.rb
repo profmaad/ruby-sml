@@ -17,10 +17,13 @@ module SML
       parameter_name = array_rep.shift
       parameter_value = SML::ProcParameterValue.construct(array_rep.shift)
       child_list = []
-      array_rep.shift.each do |entry_array_rep|
-        entry = SML::Tree.construct(entry_array_rep)
-        return nil if entry.nil?
-        child_list << entry
+      child_list_array_rep = array_rep.shift
+      unless child_list_array_rep.nil?
+        child_list_array_rep.each do |entry_array_rep|
+          entry = SML::Tree.construct(entry_array_rep)
+          return nil if entry.nil?
+          child_list << entry
+        end
       end
 
       return SML::Tree.new(parameter_name, parameter_value, child_list)
