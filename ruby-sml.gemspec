@@ -2,7 +2,7 @@ require 'rake'
 
 Gem::Specification.new do |s|
   s.name = 'ruby-sml'
-  s.version = '0.1'
+  s.version = '0.2'
   s.summary = 'Pure ruby implementation of the Smart Messaging Language protocol'
   s.description = <<-EOF
   ruby-sml implements the Smart Messaging Language specification 1.3 (http://www.vde.de/de/fnn/arbeitsgebiete/messwesen/documents/Spezifikation_SML_1-03.pdf) in pure ruby. So far, only transport protocol v1 is supported.
