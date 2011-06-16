@@ -24,3 +24,5 @@ require 'ruby-sml/sml-treepath'
 require 'ruby-sml/sml-tree'
 require 'ruby-sml/sml-tupelentry'
 require 'ruby-sml/sml-valueentry'
+
+require 'ruby-sml/units'
