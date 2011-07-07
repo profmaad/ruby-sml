@@ -8,7 +8,7 @@ module SML
 
   module Helpers
 
-    def hex_to_s(hex)
+    def self.hex_to_s(hex)
       result = ""
       hex.each_byte do |byte|
         result << byte.to_s(16) << ":"
@@ -18,7 +18,7 @@ module SML
       return result
     end
 
-    def print_entry(entry)
+    def self.print_entry(entry)
       return unless (entry.class == SML::ListEntry or entry.class == SML::PeriodEntry)
 
       name = entry.name
@@ -28,16 +28,17 @@ module SML
 
       name = SML::OBIS::resolve(name)
       value = value * (10**entry.scaler) if ((value.class == Fixnum) and not (scaler.nil?))
-      unit = SML::Units[unit]["unit"] unless SML::Units[unit].nil?
+      value = value.to_f if (value.class == Fixnum)
+      unit = SML::Units[unit]["unit"] unless (unit.nil? or SML::Units[unit].nil?)
 
-      puts "#{name}: #{value} #{unit}"      
+      puts "#{name}: #{value} #{unit}"
     end
 
-    def print_tree(tree)
+    def self.print_tree(tree)
       return unless tree.class == SML::Tree
       print_tree_internal(tree, 0)
     end
-    def print_tree_internal(tree, level)
+    def self.print_tree_internal(tree, level)
       name = tree.parameter_name
       name = SML::OBIS::resolve(name)
 

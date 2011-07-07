@@ -4,7 +4,7 @@ module SML
 
   module OBIS
 
-    def resolve(obis)
+    def self.resolve(obis)
       if SML::OBIS::Lookup[obis].nil?
         return SML::Helpers::hex_to_s(obis)
       else
