@@ -32,7 +32,12 @@ module SML
       scaler = array_rep.shift
       array_rep.shift unless scaler.nil?
       value = array_rep.shift
-      value_type = array_rep.shift if value.class == Fixnum
+      case value
+      when Fixnum
+        value_type = array_rep.shift
+      when String
+        value_type = :string
+      end
       signature = array_rep.shift
 
       return nil if (value.nil? or name.nil?)
@@ -44,7 +49,9 @@ module SML
     end
 
     def to_a
-      return [] << name << status << status_type << value_time.to_a << unit << scaler << value << value_type << signature
+      result = [] << name << status << status_type << value_time.to_a << unit << :uint8 << scaler << :int8 << value
+      result << value_type if value.class == Fixnum
+      return result << signature
     end
 
     def calculate_hash(server_id)
