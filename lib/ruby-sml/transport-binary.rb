@@ -131,25 +131,25 @@ module SML
     end
 
     def self.handle_escape(bytes)
-      print "escape sequence: "
+#      print "escape sequence: "
       if bytes[0] == 0x01 and bytes[1] == 0x01 and bytes[2] == 0x01 and bytes[3] == 0x01
-        puts "data transmission v1"
+#        puts "data transmission v1"
       elsif bytes[0] == 0x1a
-        puts "end of data transmission (padding: #{bytes[1]}, checksum: 0x#{bytes[2].to_s(16)}#{bytes[3].to_s(16)})"
+#        puts "end of data transmission (padding: #{bytes[1]}, checksum: 0x#{bytes[2].to_s(16)}#{bytes[3].to_s(16)})"
         return "" << bytes[2] << bytes[3], bytes[1]
       elsif bytes[0] == 0x02
-        puts "data transmission v2"
+#        puts "data transmission v2"
       elsif bytes[0] == 0x03
-        puts "v2 set timeout"
+#        puts "v2 set timeout"
       elsif bytes[0] == 0x04
-        puts "v2 set block size"
+#        puts "v2 set block size"
       elsif bytes[0] == 0x1b and bytes[1] == 0x1b and bytes[2] == 0x1b and bytes[3] == 0x1b
-        puts "literal escape :("
+#        puts "literal escape :("
         return 1, 0
       else
-        print "unknown ["
-        print "0x%08x" % escape
-        puts "]"
+#        print "unknown ["
+#        print "0x%08x" % escape
+#        puts "]"
       end
       return 0, 0
     end
